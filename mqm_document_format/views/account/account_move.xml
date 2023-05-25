@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <template
+            id="report_invoice_document"
+            inherit_id="account_invoice_report_grouped_by_picking.report_invoice_document"
+        >
+            <xpath expr="//tr[@t-else='']" position="replace">
+            </xpath>
+        </template>
+    </data>
+</odoo>
