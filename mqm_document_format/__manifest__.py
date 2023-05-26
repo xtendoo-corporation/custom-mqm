@@ -1,8 +1,8 @@
 {
-    "name": "Document Format Fguadiamar",
-    "summary": """Formatos de documentos de Ferreteria Guadiamar""",
+    "name": "Document Format MQM",
+    "summary": """Formatos de documentos de MasQModa""",
     "version": "15.0.1.0.0",
-    "description": """Formatos de documentos de Ferreteria Guadiamar""",
+    "description": """Formatos de documentos de MasQModa""",
     "author": "Daniel Dominguez",
     "company": "Xtendoo",
     "website": "http://xtendoo.es",
@@ -10,13 +10,9 @@
     "license": "AGPL-3",
     "depends": [
         "base",
-        "web",
-        "account_invoice_report_grouped_by_picking",
         "product",
     ],
     "data": [
-        "views/layout/external_layout_clean.xml",
-        "views/account/account_move.xml",
         'report/product_reports.xml',
     ],
     "installable": True,

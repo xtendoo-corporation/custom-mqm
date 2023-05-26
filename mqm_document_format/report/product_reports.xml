@@ -1,127 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="report_product_label_guadiamar" model="ir.actions.report">
-            <field name="name">Product Label (Guadiamar)</field>
+        <record id="report_product_label_mqm" model="ir.actions.report">
+            <field name="name">Product Label (MqM)</field>
             <field name="model">product.template</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">document_format_fguadiamar.report_productlabelguadiamar</field>
-            <field name="report_file">document_format_fguadiamar.report_productlabelguadiamar</field>
+            <field name="report_name">mqm_document_format.report_productlabelmqm</field>
+            <field name="report_file">mqm_document_format.report_productlabelmqm</field>
             <field name="paperformat_id" ref="product.paperformat_label_sheet"/>
             <field name="print_report_name">'Products Labels - %s' % (object.name)</field>
             <field name="binding_model_id" eval="False"/>
             <field name="binding_type">report</field>
         </record>
 
-        <template id="report_simple_label_guadiamar">
-             <t t-set="barcode_size" t-value="'width:33mm;height:8mm'"/>
-            <t t-set="table_style" t-value="'width:65mm;height:40mm;' + table_style"/>
-            <td t-att-style="make_invisible and 'visibility:hidden;'" >
+         <template id="report_simple_label_mqm">
+             <t t-set="barcode_size" t-value="'width:60mm;height:6mm'"/>
+            <t t-set="table_style" t-value="'width:70mm;height:25mm;' + table_style"/>
+            <td class="p-0" t-att-style="make_invisible and 'visibility:hidden;'" >
                 <div class="o_label_full" t-att-style="table_style">
-                    <div id="company_logo">
-                        <img
-                    style="width:80%;margin-left:10%;"
-                    src="/document_format_fguadiamar/static/src/img/logo.png"
-                />
-                    </div>
                     <div class="o_label_name">
                         <strong t-field="product.display_name"/>
                     </div>
-                    <t t-if="product.list_price != 0.00">
-                        <t t-set="price_origin" t-value="product.tax_string.find('=') + 2"/>
-                        <t t-set="price_end" t-value="product.tax_string.find('€') - 1"/>
-                        <t t-set="price_with_tax" t-value="product.tax_string[price_origin:price_end]"></t>
-                        <t t-set="price_with_tax" t-value="price_with_tax.replace(',','.')"></t>
-                        <t t-set="price_with_tax" t-value="float(price_with_tax)"></t>
-                    </t>
-                    <t t-else="">
-                         <t t-set="price_with_tax" t-value="product.list_price"></t>
-                    </t>
-
-
-                    <div class="text-right" style="padding-top:0;padding-bottom:0">
-                        <t t-if="product.is_product_variant">
-                            <strong class="o_label_price_medium" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>
-                        </t>
-                        <t t-else="">
-                            <strong class="o_label_price_medium" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>
-                        </t>
+                    <div class="o_label_data" style="margin-top:-25px;">
+                        <div class="text-center">
+                            <span class="text-nowrap" t-field="product.default_code"/>
+                            <t t-if="barcode">
+                                <div t-out="barcode" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size}"/>
+                                <span class="text-center" t-out="barcode"/>
+                            </t>
+                        </div>
+                        <div class="text-end" style="line-height:normal;margin-top:-25px;font-size:0.9em;" >
+<!--                            <div class="o_label_extra_data">-->
+<!--                                <t t-out="extra_html"/>-->
+<!--                            </div>-->
+                            <t t-if="product.is_product_variant">
+                                <strong class="o_label_price" t-field="product.lst_price" t-options="{'widget': 'monetary', 'label_price': True}"/>
+                            </t>
+                            <t t-else="">
+                                <strong class="o_label_price" t-field="product.list_price" t-options="{'widget': 'monetary', 'label_price': True}"/>
+                            </t>
+                        </div>
+                        <div class="o_label_clear"></div>
                     </div>
-<!--                    <div class= "text-center o_label_small_barcode">-->
-<!--                        <span class="text-nowrap" t-field="product.default_code"/>-->
-<!--                        <t t-if="barcode">-->
-<!--                            <div t-out="barcode" style="padding:0" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size}"/>-->
-<!--                            <span class="text-center" t-out="barcode"/>-->
-<!--                        </t>-->
-<!--                    </div>-->
                 </div>
             </td>
         </template>
-
-         <template id="report_simple_label_guadiamar_3_5">
-             <t t-set="barcode_size" t-value="'width:23mm;height:8mm'"/>
-            <t t-set="table_style" t-value="'width:50mm;height:30mm;' + table_style"/>
-            <td t-att-style="make_invisible and 'visibility:hidden;'" >
-                <div class="o_label_full" t-att-style="table_style">
-                    <div id="company_logo">
-                        <img
-                    style="width:60%;margin-left:20%;"
-                    src="/document_format_fguadiamar/static/src/img/logo.png"
-                />
-                    </div>
-                    <div class="o_label_name">
-                        <strong style="font-size:0.8em;" t-field="product.display_name"/>
-                    </div>
-                    <t t-if="product.list_price != 0.00">
-                        <t t-set="price_origin" t-value="product.tax_string.find('=') + 2"/>
-                        <t t-set="price_end" t-value="product.tax_string.find('€') - 1"/>
-                        <t t-set="price_with_tax" t-value="product.tax_string[price_origin:price_end]"></t>
-                        <t t-set="price_with_tax" t-value="price_with_tax.replace(',','.')"></t>
-                        <t t-set="price_with_tax" t-value="float(price_with_tax)"></t>
-                    </t>
-                    <t t-else="">
-                         <t t-set="price_with_tax" t-value="product.list_price"></t>
-                    </t>
-
-
-                    <div class="text-right" style="padding-top:0;padding-bottom:0">
-                        <t t-if="product.is_product_variant">
-                            <strong class="o_label_price_medium" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>
-                        </t>
-                        <t t-else="">
-                            <strong class="o_label_price_medium" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>
-                        </t>
-                    </div>
-<!--                    <div class= "text-center o_label_small_barcode">-->
-<!--                        <span class="text-nowrap" t-field="product.default_code"/>-->
-<!--                        <t t-if="barcode">-->
-<!--                            <div t-out="barcode" style="padding:0" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size}"/>-->
-<!--                            <span class="text-center" t-out="barcode"/>-->
-<!--                        </t>-->
-<!--                    </div>-->
-                </div>
-            </td>
-        </template>
-
-        <template id="report_productlabel_g">
+        <template id="report_productlabel_m">
             <t t-call="web.html_container">
                 <t t-if="columns and rows">
-                    <t t-if="columns == 3 and rows == 6">
-                        <t t-set="padding_page" t-value="'padding: 14mm 3mm'"/>
-                        <t t-set="report_to_call" t-value="'document_format_fguadiamar.report_simple_label_guadiamar'"/>
+                    <t t-if="columns == 3 and rows == 11">
+                        <t t-set="padding_page" t-value="'padding: 11mm 0mm'"/>
+                        <t t-set="report_to_call" t-value="'mqm_document_format.report_simple_label_mqm'"/>
                     </t>
-                    <t t-elif="columns == 4 and rows == 8">
-                        <t t-set="padding_page" t-value="'padding: 10mm 3mm'"/>
-                        <t t-set="report_to_call" t-value="'document_format_fguadiamar.report_simple_label_guadiamar_3_5'"/>
-                    </t>
-                </t>
-                <t t-foreach="range(page_numbers)" t-as="page">
+                    <t t-foreach="range(page_numbers)" t-as="page">
                         <div class="o_label_sheet" t-att-style="padding_page">
-                            <table class="my-0 table table-sm table-borderless">
+                            <table class="my-0 mx-0 table table-sm table-borderless" style="border-spacing: 30px;">
                                 <t t-foreach="range(rows)" t-as="row">
                                     <tr>
                                         <t t-foreach="range(columns)" t-as="column">
-                                            <t t-if="not current_quantity and quantity">
+                                            <t t-if="not current_quantity and quantity and not (current_data and current_data[1])">
                                                 <t t-set="current_data" t-value="quantity.popitem()"/>
                                                 <t t-set="product" t-value="current_data[0]"/>
                                                 <t t-set="barcode_and_qty" t-value="current_data[1].pop()"/>
@@ -140,7 +77,7 @@
                                             <t t-else="">
                                                 <t t-set="make_invisible" t-value="True"/>
                                             </t>
-                                            <t t-set="table_style" t-value="'border: 1px solid %s;' % (product.env.user.company_id.primary_color or 'black')"/>
+                                            <t t-set="table_style" t-value="'border: 0px;'"/>
                                             <t t-call="{{report_to_call}}"/>
                                         </t>
                                     </tr>
@@ -148,13 +85,13 @@
                             </table>
                         </div>
                     </t>
+                </t>
             </t>
         </template>
-
-        <template id="report_productlabelguadiamar">
+        <template id="report_productlabelmqm">
             <t t-call="web.basic_layout">
                 <div class="page">
-                    <t t-call="document_format_fguadiamar.report_productlabel_g">
+                    <t t-call="mqm_document_format.report_productlabel_m">
                         <t t-set="products" t-value="products"/>
                     </t>
                 </div>

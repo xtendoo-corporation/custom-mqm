@@ -10,13 +10,12 @@ class ProductLabelLayout(models.TransientModel):
     _inherit = 'product.label.layout'
 
     print_format = fields.Selection([
-        ('fguadiamar', 'Ferreteria Guadiamar'),
-        ('fguadiamar_3_5', 'Ferreteria Guadiamar 3 x 5'),
+        ('mqm', 'MasQModa 2.5 x 7'),
         ('dymo', 'Dymo'),
         ('2x7xprice', '2 x 7 with price'),
         ('4x7xprice', '4 x 7 with price'),
         ('4x12', '4 x 12'),
-        ('4x12xprice', '4 x 12 with price')], string="Format", default='fguadiamar', required=True)
+        ('4x12xprice', '4 x 12 with price')], string="Format", default='mqm', required=True)
 
     @api.depends('print_format')
     def _compute_dimensions(self):
@@ -26,10 +25,8 @@ class ProductLabelLayout(models.TransientModel):
                 wizard.columns = int(columns)
                 wizard.rows = int(rows)
             else:
-                if wizard.print_format == 'fguadiamar':
-                    wizard.columns, wizard.rows = 3, 6
-                elif wizard.print_format == 'fguadiamar_3_5':
-                    wizard.columns, wizard.rows = 4, 8
+                if wizard.print_format == 'mqm':
+                    wizard.columns, wizard.rows = 3, 11
                 else:
                     wizard.columns, wizard.rows = 1, 1
 
@@ -40,10 +37,8 @@ class ProductLabelLayout(models.TransientModel):
         # Get layout grid
         if self.print_format == 'dymo':
             xml_id = 'product.report_product_template_label_dymo'
-        elif self.print_format == 'fguadiamar':
-            xml_id = 'document_format_fguadiamar.report_product_label_guadiamar'
-        elif self.print_format == 'fguadiamar_3_5':
-            xml_id = 'document_format_fguadiamar.report_product_label_guadiamar'
+        elif self.print_format == 'mqm':
+            xml_id = 'mqm_document_format.report_product_label_mqm'
         elif 'x' in self.print_format:
             xml_id = 'product.report_product_template_label'
         else:

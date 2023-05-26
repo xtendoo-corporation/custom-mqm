@@ -40,8 +40,8 @@ def _prepare_data(env, data):
         'extra_html': layout_wizard.extra_html,
     }
 
-class ReportProductTemplateLabelGuadiamar(models.AbstractModel):
-    _name = 'report.document_format_fguadiamar.report_productlabelguadiamar'
+class ReportProductTemplateLabelMqm(models.AbstractModel):
+    _name = 'report.mqm_document_format.report_productlabelmqm'
     _description = 'Product Label Report'
 
     def _get_report_values(self, docids, data):
