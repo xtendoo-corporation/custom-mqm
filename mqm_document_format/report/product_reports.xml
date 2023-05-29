@@ -29,15 +29,35 @@
                                 <span class="text-center" t-out="barcode"/>
                             </t>
                         </div>
+                        <t t-if="product.taxes_id">
+                        <t t-set="price_origin" t-value="product.tax_string.find('=') + 2"/>
+                        <t t-set="price_end" t-value="product.tax_string.find('€') - 1"/>
+                        <t t-set="price_with_tax" t-value="product.tax_string[price_origin:price_end]"></t>
+                        <t t-set="price_with_tax" t-value="price_with_tax.replace(',','.')"></t>
+                        <t t-set="price_with_tax" t-value="float(price_with_tax)"></t>
+                    </t>
+                    <t t-else="">
+                         <t t-set="price_with_tax" t-value="product.list_price"></t>
+                    </t>
+
+
+<!--                    <div class="text-right" style="padding-top:0;padding-bottom:0">-->
+<!--                        <t t-if="product.is_product_variant">-->
+<!--                            <strong class="o_label_price_medium" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>-->
+<!--                        </t>-->
+<!--                        <t t-else="">-->
+<!--                            <strong class="o_label_price_medium" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>-->
+<!--                        </t>-->
+<!--                    </div>-->
                         <div class="text-end" style="line-height:normal;margin-top:-25px;font-size:0.9em;" >
 <!--                            <div class="o_label_extra_data">-->
 <!--                                <t t-out="extra_html"/>-->
 <!--                            </div>-->
                             <t t-if="product.is_product_variant">
-                                <strong class="o_label_price" t-field="product.lst_price" t-options="{'widget': 'monetary', 'label_price': True}"/>
+                                <strong class="o_label_price" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>
                             </t>
                             <t t-else="">
-                                <strong class="o_label_price" t-field="product.list_price" t-options="{'widget': 'monetary', 'label_price': True}"/>
+                                <strong class="o_label_price" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>
                             </t>
                         </div>
                         <div class="o_label_clear"></div>
