@@ -13,6 +13,83 @@
             <field name="binding_type">report</field>
         </record>
 
+        <record id="paperformat_label_mqm" model="report.paperformat">
+            <field name="name">Etiqueta MQM</field>
+            <field name="default" eval="False"/>
+            <field name="format">custom</field>
+            <field name="page_height">30</field>
+            <field name="page_width">70</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+
+
+
+        <template id="report_simple_label_mqm_report">
+                <t t-foreach="quantity.items()" t-as="item">
+                    <t t-set="product" t-value="item[0]"/>
+                    <t t-foreach="range(page_numbers)" t-as="page">
+                    <t t-call="web.html_container">
+<!--                        <span t-esc="item"></span>-->
+                        <t t-set="barcode_size" t-value="'width:60mm;height:6mm'"/>
+                        <div class="page" style="page-break-before:always;">
+                            <t t-call="mqm_document_format.report_simple_label_mqm_new"/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_simple_label_mqm_new">
+    <div style="width:70mm;height:30mm;display:block;margin:0;padding:0;margin-left:-6%;">
+        <div style="height:100%; width:100%;">
+            <div class="o_label_name" style="display:block!important;font-size:18px; text-align:center;height:40%;">
+                <strong t-field="product.display_name"/>
+            </div>
+            <div class="o_label_data">
+                 <div class="text-center">
+<!--                     <span class="text-nowrap" t-field="product.default_code"/>-->
+                     <t t-set="barcode" t-value="product.barcode"/>
+                     <t t-if="barcode">
+                         <div t-out="barcode" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size}"/>
+                         <span class="text-center" t-out="barcode"/>
+                     </t>
+                     <t t-if="not barcode">
+                        <!-- Contenedor vacío con el mismo tamaño que ocuparía el código de barras -->
+                        <div style="width: 60mm; height: 6mm;"></div>
+                    </t>
+                 </div>
+                 <t t-if="product.taxes_id">
+                        <t t-set="price_origin" t-value="product.tax_string.find('=') + 2"/>
+                        <t t-set="price_end" t-value="product.tax_string.find('€') - 1"/>
+                        <t t-set="price_with_tax" t-value="product.tax_string[price_origin:price_end]"></t>
+                        <t t-set="price_with_tax" t-value="price_with_tax.replace(',','.')"></t>
+                        <t t-set="price_with_tax" t-value="float(price_with_tax)"></t>
+                    </t>
+                    <t t-else="">
+                         <t t-set="price_with_tax" t-value="product.list_price"></t>
+                    </t>
+                <div class="text-end" style="line-height:normal;margin-top:-38px;font-size:1.5em;" >
+                    <t t-if="product.is_product_variant">
+                        <strong class="o_label_price" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>
+                    </t>
+                    <t t-else="">
+                        <strong class="o_label_price" t-esc="price_with_tax" t-options="{'widget': 'monetary', 'label_price': True, 'display_currency': product.currency_id}"/>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+
          <template id="report_simple_label_mqm">
              <t t-set="barcode_size" t-value="'width:60mm;height:6mm'"/>
             <t t-set="table_style" t-value="'width:70mm;height:25mm;' + table_style"/>
@@ -39,6 +116,7 @@
                     <t t-else="">
                          <t t-set="price_with_tax" t-value="product.list_price"></t>
                     </t>
+
 
 
 <!--                    <div class="text-right" style="padding-top:0;padding-bottom:0">-->
@@ -68,11 +146,16 @@
         <template id="report_productlabel_m">
             <t t-call="web.html_container">
                 <t t-if="columns and rows">
-                    <t t-if="columns == 3 and rows == 11">
+                    <t t-if="columns == 1 and rows == 1">
                         <t t-set="padding_page" t-value="'padding: 11mm 0mm'"/>
-                        <t t-set="report_to_call" t-value="'mqm_document_format.report_simple_label_mqm'"/>
+<!--                        <t t-set="report_to_call" t-value="'mqm_document_format.report_simple_label_mqm_new'"/>-->
+                        <t t-call="mqm_document_format.report_simple_label_mqm_report">
+                            <t t-set="current_data" t-value="quantity"/>
+<!--                            <t t-set="product" t-value="current_data[0]"/>-->
+                        </t>
                     </t>
-                    <t t-foreach="range(page_numbers)" t-as="page">
+                    <t t-else="">
+                        <t t-foreach="range(page_numbers)" t-as="page">
                         <div class="o_label_sheet" t-att-style="padding_page">
                             <table class="my-0 mx-0 table table-sm table-borderless" style="border-spacing: 30px;">
                                 <t t-foreach="range(rows)" t-as="row">
@@ -104,6 +187,7 @@
                                 </t>
                             </table>
                         </div>
+                    </t>
                     </t>
                 </t>
             </t>

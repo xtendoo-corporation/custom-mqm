@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -10,7 +9,7 @@ class ProductLabelLayout(models.TransientModel):
     _inherit = 'product.label.layout'
 
     print_format = fields.Selection([
-        ('mqm', 'MasQModa 2.5 x 7'),
+        ('mqm', 'MasQModa 3 x 7'),
         ('dymo', 'Dymo'),
         ('2x7xprice', '2 x 7 with price'),
         ('4x7xprice', '4 x 7 with price'),
@@ -26,11 +25,12 @@ class ProductLabelLayout(models.TransientModel):
                 wizard.rows = int(rows)
             else:
                 if wizard.print_format == 'mqm':
-                    wizard.columns, wizard.rows = 3, 11
+                    wizard.columns, wizard.rows = 1, 1
                 else:
                     wizard.columns, wizard.rows = 1, 1
 
     def _prepare_report_data(self):
+        multi_print=True
         if self.custom_quantity <= 0:
             raise UserError(_('You need to set a positive quantity.'))
 
@@ -39,6 +39,7 @@ class ProductLabelLayout(models.TransientModel):
             xml_id = 'product.report_product_template_label_dymo'
         elif self.print_format == 'mqm':
             xml_id = 'mqm_document_format.report_product_label_mqm'
+            multi_print = False
         elif 'x' in self.print_format:
             xml_id = 'product.report_product_template_label'
         else:
@@ -60,5 +61,6 @@ class ProductLabelLayout(models.TransientModel):
             'quantity_by_product': {p: self.custom_quantity for p in products},
             'layout_wizard': self.id,
             'price_included': 'xprice' in self.print_format,
+            'multi_print': multi_print,
         }
         return xml_id, data

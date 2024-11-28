@@ -15,7 +15,6 @@ def _prepare_data(env, data):
         Product = env['product.product'].with_context(display_default_code=False)
     else:
         raise UserError(_('Product model not defined, Please contact your administrator.'))
-
     total = 0
     quantity_by_product = defaultdict(list)
     for p, q in data.get('quantity_by_product').items():
@@ -26,16 +25,24 @@ def _prepare_data(env, data):
         # we expect custom barcodes format as: {product: [(barcode, qty_of_barcode)]}
         for product, barcodes_qtys in data.get('custom_barcodes').items():
             quantity_by_product[Product.browse(int(product))] += (barcodes_qtys)
+
             total += sum(qty for _, qty in barcodes_qtys)
 
     layout_wizard = env['product.label.layout'].browse(data.get('layout_wizard'))
     if not layout_wizard:
         return {}
+    total_pages = (total - 1) // (layout_wizard.rows * layout_wizard.columns) + 1
+    if data.get('multi_print') == False:
+        layout_wizard.rows=1
+        layout_wizard.columns=1
+        for product in data.get('quantity_by_product').items():
+            total_pages = product[1]
+
     return {
         'quantity': quantity_by_product,
         'rows': layout_wizard.rows,
         'columns': layout_wizard.columns,
-        'page_numbers': (total - 1) // (layout_wizard.rows * layout_wizard.columns) + 1,
+        'page_numbers': total_pages,
         'price_included': data.get('price_included'),
         'extra_html': layout_wizard.extra_html,
     }
