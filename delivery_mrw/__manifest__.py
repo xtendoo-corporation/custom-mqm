@@ -20,6 +20,7 @@
         "views/delivery_mrw_view.xml",
         "views/stock_picking_views.xml",
         "views/mrw_manifest_template.xml",
+        "wizard/stock_immediate_transfer_views_2.xml",
         "wizard/stock_immediate_transfer_views.xml",
         "wizard/mrw_manifest_wizard_views.xml",
         "security/ir.model.access.csv",
