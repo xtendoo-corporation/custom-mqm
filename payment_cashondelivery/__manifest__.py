@@ -6,6 +6,7 @@
     'summary': "A payment provider for cashondelivery flows like contrarreembolsos.",
     'description': " ",  # Non-empty string to avoid loading the README file.
     'depends': ['payment'],
+    'author': 'Guillermo Bárcena López',
     'data': [
         'views/payment_cashondelivery_templates.xml',
         'views/payment_provider_views.xml',
