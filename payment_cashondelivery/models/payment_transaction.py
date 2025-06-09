@@ -22,10 +22,10 @@ class PaymentTransaction(models.Model):
         :return: The dict of provider-specific processing values
         :rtype: dict
         """
+        print("*" * 100)
         res = super()._get_specific_rendering_values(processing_values)
         if self.provider_code != 'cashondelivery':
             return res
-
         return {
             'api_url': CustomController._process_url,
             'reference': self.reference,

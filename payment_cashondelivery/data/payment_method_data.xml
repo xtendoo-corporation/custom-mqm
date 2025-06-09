@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo noupdate="1">
-    <data>
         <record id="payment_method_cashondelivery" model="payment.method">
             <field name="name">Contrarreembolso</field>
             <field name="code">cashondelivery</field>
@@ -10,5 +9,4 @@
             <field name="support_express_checkout">False</field>
             <field name="support_refund"></field>
         </record>
-    </data>
 </odoo>
