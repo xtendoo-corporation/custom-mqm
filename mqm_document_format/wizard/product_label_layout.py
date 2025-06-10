@@ -36,12 +36,15 @@ class ProductLabelLayout(models.TransientModel):
 
         # Get layout grid
         if self.print_format == 'dymo':
+
             xml_id = 'product.report_product_template_label_dymo'
         elif self.print_format == 'mqm':
             xml_id = 'mqm_document_format.report_product_label_mqm'
             multi_print = False
         elif 'x' in self.print_format:
-            xml_id = 'product.report_product_template_label'
+            xml_id = 'product.report_product_template_label_%sx%s' % (self.columns, self.rows)
+            if 'xprice' not in self.print_format:
+                xml_id += '_noprice'
         else:
             xml_id = ''
 
